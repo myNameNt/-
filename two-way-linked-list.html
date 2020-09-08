@@ -1,28 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
     class Node {
-      constructor(element){
+      constructor(element) {
         this.element = element
         this.next = null
         this.prevent = null
       }
     }
     class TwoWayLink {
-      constructor () {
+      constructor() {
         this.head = null
         this.length = 0
       }
-      append () {
+      append(element) {
+        let node = new Node(element)
+        if (this.head === null) {
+          this.head = node
+        } else {
+          let current = this.head
+          while (current.next) {
+            current = current.next
+          }
+          current.next = node
+          node.prevent = current
+        }
+        this.length++
+      }
+      insert(position, element) {
+        let node = new Node(element)
+        let current = this.head
+        if (position >= 0 && position <= this.length) {
+          if (position === 0) {
+            current.prevent = node
+            node.next = current
+            this.head = node
+            this.length++
+            return true
+          }
+          let index = 1
+          while(index < this.length) {
+            if(index === position){
+              node.prevent = current
+              node.next = current.next
+              current.next.prevent = node
+              current.next = node
+              this.length++
+              return true
+            }
+            current = current.next
+            index++
+          }
+        }
+        return false
+      }
+      indexOf(position){
         
       }
     }
+    let twoWayList = new TwoWayLink
+    twoWayList.append('悟空')
+    twoWayList.append('悟净')
+    twoWayList.append('悟能')
+    twoWayList.insert(1,'玄奘')
+    console.log(twoWayList)
   </script>
 </body>
+
 </html>
