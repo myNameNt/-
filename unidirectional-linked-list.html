@@ -1,0 +1,134 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: nt
+ * @Date: 2020-09-08 13:40:04
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-09-08 17:10:08
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function Node(element) {
+      this.element = element
+      this.next = null
+    }
+    class LinkedList {
+      constructor() {
+        this.length = 0
+        this.head = null
+      }
+
+      append(element) {
+        var node = new Node(element)
+        var current
+        if (this.head === null) {
+          this.head = node
+        } else {
+          current = this.head
+          while (current.next) {
+            current = current.next
+          }
+          current.next = node
+        }
+        this.length++
+      }
+      insert(position, element) {
+        if (position >= 0 && position <= this.length) {
+          var current = this.head;
+          let node = new Node(element)
+          if (position === 0) {
+            node.next = current
+            this.header = node
+          } else {
+            var previous;
+            let i = 0
+            while (i < position) {
+              previous = current
+              current = current.next
+              i++
+            }
+            previous.next = node
+            node.next = current
+          }
+          this.length++
+          return true
+        } else {
+          return false
+        }
+      }
+      indexOf(element) {
+        let index = 0
+        let current = this.head
+        while (current) {
+          if (current.element === element) {
+            return index
+          }
+          current = current.next
+          index++
+        }
+        return -1
+      }
+      remove(element) {
+        let index = this.indexOf(element)
+        console.log(index)
+        return this.removeAt(index)
+      }
+      removeAt(position) {
+        if (position === 0) {
+          this.head = this.head.next
+          this.length--
+          return true
+        }
+        if (position >= 0 && position <= this.length) {
+          let preNode = this.head
+          let current = this.head
+          let index = 0
+          while (current) {
+            if (index === position) {
+              preNode.next = current.next
+              this.length--
+              return true
+            } else {
+              preNode = current
+              current = current.next
+            }
+            index++
+          }
+          return false
+        }
+      }
+      getHead() {
+        return this.head
+      }
+      isEmpty() {
+        return this.length === 0
+      }
+      size () {
+        return this.length
+      }
+    }
+    let link = new LinkedList
+    link.append('first')
+    link.append('second')
+    link.append('thirty')
+    link.insert(1, '哈哈')
+    // console.log(link.indexOf('哈哈'))
+    console.log(link.removeAt(4), 'status')
+    link.remove('second')
+    console.log(link)
+    console.log(link.getHead())
+    console.log(link.isEmpty())
+    console.log(link.size())
+  </script>
+</body>
+
+</html>
