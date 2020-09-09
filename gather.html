@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    class Gather {
+      constructor(defaultArray = {}) {
+        this.item = defaultArray
+      }
+      has(value) {
+        return this.item.hasOwnProperty(value)
+      }
+      add(value) {
+        if (!this.has(value)) {
+          this.item[value] = value
+          return true
+        } else {
+          return false
+        }
+      }
+      remove(value) {
+        if (this.has(value)) {
+          return delete this.item[value]
+        } else {
+          return false
+        }
+      }
+      clear() {
+        this.item = {}
+        return true
+      }
+      size() {
+        // 另外一种方式
+        // let count = 0
+        // for (let item in this.item) {
+        //   if (this.item.hasOwnProperty(item)) {
+        //     count++
+        //   }
+        // }
+        // return count
+        return Object.keys(this.item).length || 0 // 只支持ie9往上
+      }
+      values() {
+        return Object.keys(this.item)
+      }
+      valueLegacy() {
+        let keys = []
+        for (let key in this.item) {
+          keys.push(key)
+        }
+        return keys
+      }
+      union(otherSet) {// 应用 返回两个合集的并集
+        let unionSet = new Gather
+        let values = this.values()
+        for (let i = 0; i < values.length; i++) {
+          unionSet.add(values[i])
+        }
+        values = otherSet.values()
+        for (let i = 0; i < values.length; i++) {
+          unionSet.add(values[i])
+        }
+        return unionSet
+      }
+      intersection(otherSet) {
+        let intersectionSet = new Gather
+        let values = this.values()
+        for (let i = 0; i < values.length; i++) {
+          if (otherSet.has(values[i])) {
+            intersectionSet.add(values[i])
+          }
+        }
+        return intersectionSet
+      }
+      difference(otherSet) {
+        let differenceSet = new Gather
+        let values = this.values()
+        for (let i = 0; i < values.length; i++) {
+          if (!otherSet.has(values[i])) {
+            differenceSet.add(values[i])
+          }
+        }
+        values = otherSet.values()
+        for (let i = 0; i < values.length; i++) {
+          if (!this.has(values[i])) {
+            differenceSet.add(values[i])
+          }
+        }
+        return differenceSet
+      }
+      subset(otherSet) {
+        let values = this.values()
+        for (let i = 0; i < values.length; i++) {
+          if (!otherSet.has(values[i])) {
+            return false
+          }
+        }
+        return true
+      }
+    }
+
+    let firstGather = new Gather
+    let secondGather = new Gather
+    firstGather.add('哈哈')
+    firstGather.add('嘻嘻')
+    firstGather.add('呵呵')
+    firstGather.add('哼哼')
+    firstGather.add('11')
+    firstGather.add('22')
+
+    secondGather.add('如来')
+    secondGather.add('悟空')
+    secondGather.add('悟净')
+    secondGather.add('悟能')
+    secondGather.add('11')
+    secondGather.add('22')
+
+    console.log(secondGather.union(firstGather).item)
+    console.log(secondGather.intersection(firstGather).item)
+    console.log(secondGather.difference(firstGather).item)
+  </script>
+</body>
+
+</html>

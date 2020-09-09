@@ -1,0 +1,116 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: nt
+ * @Date: 2020-09-09 10:54:23
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-09-09 14:36:18
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 栈  后进先出
+    // 队列 先进先出
+
+    // stack 栈
+    class Stack {
+      constructor(defaultArr = []) {
+        this.item = defaultArr
+      }
+      pop() {
+        return this.item.pop()
+      }
+      push(element) {
+        return this.item.push(element)
+      }
+      peek() {
+        return this.item[this.item.length - 1]
+      }
+      isEmpty() {
+        return this.item.length === 0
+      }
+      clear() {
+        this.item = []
+      }
+      size() {
+        return this.item.length
+      }
+      toString() {
+        return this.item.join('')
+      }
+      reverseString() {
+        let copyItem = this.item
+        return copyItem.reverse().join('')
+      }
+      getItem() {
+        return this.item
+      }
+    }
+    // 将10进制数转化为二进制数
+    function divideBy2(num) {
+      let stack = new Stack
+      let item = 0
+      while (num > 0) {
+        item = num % 2
+        num = Math.floor(num / 2)
+        stack.push(item)
+      }
+      return stack.reverseString()
+    }
+    console.log(divideBy2(2))
+
+    // 队列
+    class Queue {
+      constructor(defaultArr = []) {
+        this.item = defaultArr
+      }
+      enQueue(elements) {
+        if (Array.isArray(elements)) {
+          this.item = this.item.concat(elements)
+        } else {
+          this.item.push(elements)
+        }
+      }
+      deQueue() {
+        return this.item.shift()
+      }
+      front() {
+        return this.item[0]
+      }
+      size() {
+        return this.item.length
+      }
+    }
+    let queue = new Queue
+    queue.enQueue([12, 1, 2, 1, 31, '43', '哈哈'])
+    queue.enQueue('嘻嘻')
+    console.log(queue, 'qu--')
+    // 击鼓传花游戏
+
+
+    function hotPotato(peopleList, num) {
+      let queue = new Queue(peopleList)
+      let eliminated = ''
+      while (queue.size() > 1) {
+        for (let i = 0; i < num; i++) {
+          queue.enQueue(queue.deQueue())
+        }
+        eliminated = queue.deQueue()
+
+      }
+      console.log('out people:' + eliminated)
+    }
+    let arr = ['嘻嘻', '呵呵', '哼哼', '嘚嘚', '咳咳', '哈哈']
+    hotPotato(arr, 180)
+  </script>
+</body>
+
+</html>
