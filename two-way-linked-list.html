@@ -20,11 +20,13 @@
       constructor() {
         this.head = null
         this.length = 0
+        this.tail = null
       }
       append(element) {
         let node = new Node(element)
         if (this.head === null) {
           this.head = node
+          this.tail = node
         } else {
           let current = this.head
           while (current.next) {
@@ -32,45 +34,96 @@
           }
           current.next = node
           node.prevent = current
+          this.tail = node
         }
         this.length++
+        return node
       }
       insert(position, element) {
         let node = new Node(element)
         let current = this.head
         if (position >= 0 && position <= this.length) {
           if (position === 0) {
-            current.prevent = node
-            node.next = current
-            this.head = node
+            if (this.head === null) {
+              this.head = node
+              this.tail = node
+            } else {
+              current.prevent = node
+              node.next = current
+              this.head = node
+            }
             this.length++
             return true
-          }
-          let index = 1
-          while(index < this.length) {
-            if(index === position){
-              node.prevent = current
-              node.next = current.next
-              current.next.prevent = node
-              current.next = node
-              this.length++
-              return true
+          } else if (position === this.length) {
+            let current = this.tail
+            current.next = node
+            node.prevent = current
+            this.tail = node
+          } else {
+            let index = 1
+            while (index < this.length) {
+              if (index === position) {
+                node.prevent = current
+                node.next = current.next
+                current.next.prevent = node
+                current.next = node
+                this.length++
+                return true
+              }
+              current = current.next
+              index++
             }
-            current = current.next
-            index++
           }
+
+        } else {
+          return false
         }
-        return false
       }
-      indexOf(position){
-        
+      removeAt(position) {
+        if (position >= 1 && position <=this.length) {
+          let current = this.head
+          if (position === 1) {
+            current = current.next
+            current.prevent = null
+            this.head = current
+          } else if (position === this.length) {
+            current = this.tail.prevent
+            current.next = null
+            this.tail = current
+          } else {
+            let index = 1
+            let preventNode = null
+            while(index < position){
+              preventNode = current
+              current = current.next
+              index++
+            }
+            preventNode.next = current.next
+            current.next.prevent = preventNode
+          }
+          this.length--
+          return true
+        } else {
+          return false
+        }
+      }
+      size (){
+        return this.length
+      }
+      getHead(){
+        return this.head
+      }
+      getTail(){
+        return this.tail
       }
     }
     let twoWayList = new TwoWayLink
     twoWayList.append('悟空')
     twoWayList.append('悟净')
     twoWayList.append('悟能')
-    twoWayList.insert(1,'玄奘')
+    twoWayList.insert(1, '玄奘')
+    console.log(twoWayList)
+    twoWayList.removeAt(3)
     console.log(twoWayList)
   </script>
 </body>
