@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>截长图</title>
+  <!--随便一个jq版本-->
+  <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+  <!--截长图用的html2canvas版本-->
+  <style>
+    /* 这个是保存成的那个图片的样式！ */
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .save_img {
+      width: 100%;
+      /*根据具体情况改数值*/
+    }
+
+    .content {
+      overflow: scroll;
+    }
+
+    .box {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      opacity: 1;
+      z-index: 8;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      overflow: scroll;
+    }
+
+    .but {
+      margin: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div class="box"><img src="" alt="" class="save_img" id="image" /></div>
+    <!-- /*生成的图片的位置*/
+    /*这里面是展示用的海报页内容 */ -->
+  </div>
+
+  <div id="page1" style="z-index: -1;">
+    <!-- /*id是为了生成图片,z-index = -1;是为了让这个截图用的页面展示出来方便截图又看不到*/
+    /*这里面是截图用的海报页内容*/ -->
+    <div class="content">
+      <p>start---</p>
+      <p>dsadsadsadsadasd的时间佛山地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>dsadsadsadsadasd的时间(佛山px)地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>dsadsadsadsadasd的时间(佛山px)地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>dsadsadsadsadasd的时间(佛山px)地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>dsadsadsadsadasd的时间(佛山px)地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>dsadsadsadsadasd的时间(佛山px)地解放螺丝钉解放楼上的金(佛山px)大家(fogpx) i色戒哦i发</p>
+      <p>end---</p>
+    </div>
+    <input id="but" class="but" type="button" value="截图" />
+  </div>
+</body>
+<script>
+  /* 
+    注意：
+      截图功能需要用自带环境的编辑器打开才可以！直接打开会报错（跨域问题）
+
+    page1是需要被截成图片的页面的id，image是截完图 保存图片地址的图片的id
+   */
+  window.onload = function () {
+    const oBtn = document.getElementById('but')
+    oBtn.addEventListener('click', () => {
+      window.pageYoffset = 0;
+      // let content = document.getElementsByClassName('content')[0]
+      // content.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      cut_image("page1", "image");
+    })
+    function cut_image(id, id2) {
+      // 如果是不超过一屏的图片截图，下面这一堆可以只写成
+      // var w = $("#" + id + "").width();
+      // var h = $("#" + id + "").height();
+      // var scrollHeight = $('#page1').prop("scrollHeight");
+      // $('#page1').scrollTop(scrollHeight);
+      // $("#image,#page1").css('height', scrollHeight);
+      // var height = $('#page1').height();
+      // var w = $("#" + id + "").width();
+      // var h = scrollHeight;
+
+      html2canvas(document.body, { scale: 1 }).then(function (canvas) {
+        var url = canvas.toDataURL("image/jpg", 0.8);//img
+        //image/jpg为格式，0.01是图片质量，可为0~1之间的数，如果超出取值范围，将会使用默认值 0.92
+        //图片地址赋值
+        document.getElementById(id2).setAttribute('src', url)
+        var pageData = canvas.toDataURL('image/jpg', 1.0);
+        saveFile(pageData.replace("image/jpg", "image/octet-stream"), new Date().getTime() + ".jpg");
+      });
+    }
+    function saveFile(data, filename) {
+      var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+      save_link.href = data;
+      save_link.download = filename;
+      var event = document.createEvent('MouseEvents');
+      event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      save_link.dispatchEvent(event);
+    };
+  }
+
+
+</script>
+
+</html>

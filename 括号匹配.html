@@ -1,0 +1,95 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: nt
+ * @Date: 2020-09-02 10:33:56
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-10-10 16:19:34
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 自己写的
+    // var generateParenthesis = function (n) {
+    //   let res = []
+    //   helper('', 0, n * 2, res)
+    //   return res
+    // };
+    // let helper = (item, index, max, res) => {
+    //   if (index > 0 && item[0] !== '(') {
+    //     return
+    //   }
+    //   if (index >= max) {
+    //     if (authGenerate(item)) {
+    //       res.push(item)
+    //     }
+    //     return
+    //   }
+    //   helper(item + '(', index + 1, max, res)
+    //   helper(item + ')', index + 1, max, res)
+    // }
+    // console.log(generateParenthesis(3))
+    // function authGenerate(str) {
+    //   let res = []
+    //   for (let i = 0; i < str.length; i++) {
+    //     let item = str[i]
+    //     if ( item === '(' ) {
+    //       res.push(item)
+    //     } else {
+    //       let popVal = res.pop()
+    //       if(popVal === undefined) return false
+    //     }
+    //   }
+    //   if (res.length === 0) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
+
+    // 大佬的
+    var generateParenthesis = function (n) {
+      let res = []
+      helper(0, 0, n, '', res)
+      return res
+    };
+    function helper(right, left, n, str, res) {
+      if (index > 0 && item[0] !== '(') {
+        return
+      }
+      if (left === n && right === n) {
+        res.push(str)
+      }
+      if (left < n) {
+        helper(right, left + 1, n, str + '(', res)
+      }
+      if (left < right) {
+        helper(right + 1, left, n, str + ')', res)
+      }
+    }
+
+    const helper = (root, lower, upper) => {
+      if (root === null) {
+        return true;
+      }
+      if (root.val <= lower || root.val >= upper) {
+        return false;
+      }
+      return helper(root.left, lower, root.val) && helper(root.right, root.val, upper);
+    }
+    var isValidBST = function (root) {
+      return helper(root, -Infinity, Infinity);
+    }
+
+  </script>
+</body>
+
+</html>

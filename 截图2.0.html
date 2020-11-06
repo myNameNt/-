@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>html2canvas</title>
+  <script type="text/javascript" src="http://www.w3school.com.cn/jquery/jquery-1.11.1.min.js"></script>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+</head>
+<script type="text/javascript">
+  window.onload = function () {
+    function takeScreenshot() {
+      html2canvas(document.getElementById('body'), {
+        onrendered: function (canvas) {
+          document.body.appendChild(canvas);
+
+          // 这个url是base64码  只有用服务启动后toDataURL()才可以正常使用
+          var url = canvas.toDataURL();
+          /**
+          * 注意: 下载效果放开1  分享放开2
+          */
+
+          // 1.PC下载图片   手机UC不好用(直接下载base64码，暂时没找到解决方案)
+          /*var triggerDownload = $("<a>").attr("href", url).attr("download", "邀请函.png");  
+          triggerDownload[0].click();  
+          triggerDownload.remove(); */
+
+          // 2.这个是微信分享
+          Wechat.share({
+            message: {
+              title: "Hi, there",
+              description: "This is description.",
+              thumb: url,
+              mediaTagName: "TEST-TAG-001",
+              messageExt: "这是第三方带的测试字段",
+              media: {
+                type: Wechat.Type.IMAGE,
+                image: url
+              }
+            },
+            scene: Wechat.Scene.SESSION   // share to Timeline//Wechat.Scene.TIMELINE 表示分享到朋友圈  //Wechat.Scene.SESSION 表示分享给好友
+          }, function () {
+            alert("Success");
+          }, function (reason) {
+            alert("Failed: " + reason);
+          });
+
+        },
+        width: 1000,
+        height: 700
+      });
+    }
+  }
+
+</script>
+
+<body id="body">
+  <a href="12345679">123456</a>
+  <div id="view" style="background:url(./1.png) 50%; width: 1000px;height: 700px;">
+    <input type="button" value="截图" οnclick="takeScreenshot()">
+  </div>
+</body>
+
+<script>
+  function shareWxa() {
+    // 配置的东西都是后台返的
+    // 注意本地没法测分享，必须经过部署进行测试
+    wx.config({
+      beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+      // debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: '', // 必填，企业微信的corpID
+      timestamp: '', // 必填，生成签名的时间戳
+      nonceStr: '', // 必填，生成签名的随机串
+      signature: '',// 必填，签名，见 附录-JS-SDK使用权限签名算法
+      jsApiList: ['onMenuShareWechat', 'onMenuShareAppMessage', 'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+    });
+    // wx.hideMenuItems({
+    //     menuList: [
+    //       "menuItem:setFont",
+    //       "menuItem:refresh",
+    //       "menuItem:share:appMessage",
+    //       "menuItem:copyUrl",
+    //       "menuItem:openWithSafari",
+    //       "menuItem:share:email"
+    //     ] // 要隐藏的菜单项
+    // });
+    // wx.agentConfig({
+    //   corpid: '', // 必填，企业微信的corpid，必须与当前登录的企业一致
+    //   agentid: '', // 必填，企业微信的应用id （e.g. 1000247）
+    //   timestamp: '', // 必填，生成签名的时间戳
+    //   nonceStr: '', // 必填，生成签名的随机串
+    //   signature: '',// 必填，签名，见附录-JS-SDK使用权限签名算法
+    //   jsApiList: ['onMenuShareWechat'], //必填
+    //   success: function(res) {
+    //       alert(JSON.stringify(res))
+    //       // 回调
+    //       console.log(res,'success')
+    //   },
+    //   fail: function(res) {
+    //     alert(JSON.stringify(res))
+    //     console.log(res,'fail')
+    //       if(res.errMsg.indexOf('function not exist') > -1){
+    //           alert('版本过低请升级')
+    //       }
+    //   }
+    // })
+    let that = this
+    var shareInfo = {
+      title: '我是标题',
+      desc: '我是内容',
+      link: 'https://www.baidu.com',
+      image: 'https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E5%88%86%E4%BA%AB%E5%9B%BE%E6%A0%87&step_word=&hs=2&pn=35&spn=0&di=20930&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=3596508898%2C2415336671&os=1402785183%2C3328036340&simid=0%2C0&adpicid=0&lpn=0&ln=644&fr=&fmq=1594955634905_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=200&height=200&face=undefined&ist=&jit=&cg=&bdtype=11&oriquery=&objurl=http%3A%2F%2Fimage.uc.cn%2Fo%2Fwemedia%2Fs%2Fupload%2F2020%2F4bVgH21e9kgefcn%2Fe7caa89a79a8ad97955c799e77afa952.png%3B%2C3%2Cjpegx%3B3%2C310x&fromurl=ippr_z2C%24qAzdH3FAzdH3Fe_z%26e3By57h7_z%26e3Bv54AzdH3Fe_fi5oAzdH3Ft1_XNDvoM3YdMThyMA%3D%3D_z%26e3Bip4s&gsm=27&rpstart=0&rpnum=0&islist=&querylist=&force=undefined'
+    }
+    wx.ready(function () {
+      // 分享给微信好友
+      wx.onMenuShareWechat({
+        title: shareInfo.title, // 分享标题
+        desc: shareInfo.desc, // 分享描述
+        link: that.shareDesc.url, // 分享链接
+        imgUrl: shareInfo.image, // 分享图标
+        success: function () {
+        },
+        cancel: function () {
+        }
+      });
+      // 获取“转发”按钮点击状态及自定义分享内容接口
+      wx.onMenuShareAppMessage({
+        title: shareInfo.title, // 分享标题
+        desc: shareInfo.desc, // 分享描述
+        link: that.shareDesc.url, // 分享链接；在微信上分享时，该链接的域名必须与企业某个应用的可信域名一致
+        imgUrl: shareInfo.image, // 分享图标
+        success: function () {
+        },
+        cancel: function () {
+        }
+      })
+      // 分享到微信朋友圈
+      wx.onMenuShareTimeline({
+        title: shareInfo.title, // 分享标题
+        link: that.shareDesc.url, // 分享链接；在微信上分享时，该链接的域名必须与企业某个应用的可信域名一致
+        imgUrl: shareInfo.image, // 分享图标
+        success: function () {
+        },
+        cancel: function () {
+        }
+      })
+    })
+    wx.error(function (res) {
+      // console.log(res,'res')
+    })
+  }
+</script>
+
+</html>
