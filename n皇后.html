@@ -1,0 +1,64 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: nt
+ * @Date: 2020-11-27 14:31:59
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-11-27 16:08:08
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    let solveNQueens = (n) => {
+      let board = []
+      for (let i = 0; i < n; i++) {
+        board.push(new Array(n).fill('.'))
+      }
+      let res = []
+
+      let isValid = (row, col) => {
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            if (board[i][j] === 'Q' && (j === col || i === row || j + i === row + col || i - j === row - col)) {
+              return false
+            }
+          }
+        }
+        return true
+      }
+
+      let helps = (row) => {
+        if (row === n) {
+          const stringsBoard = board.slice();
+          for (let i = 0; i < n; i++) {
+            stringsBoard[i] = stringsBoard[i].join(''); // 将每一行拼成字符串
+          }
+          res.push(stringsBoard); // 推入res数组
+          return
+        }
+        for (let col = 0; col < n; col++) {
+          if (isValid(row, col)) {
+            board[row][col] = 'Q'
+            helps(row + 1)
+            board[row][col] = '.';
+          }
+        }
+      }
+      helps(0)
+      return res
+    }
+    const res = solveNQueens(8)
+    console.log(res)
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

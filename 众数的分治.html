@@ -1,0 +1,107 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: nt
+ * @Date: 2020-11-26 10:15:36
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2020-11-26 11:48:26
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function countInRange(nums, num, lo, hi) {
+      let count = 0;
+      for (let i = lo; i <= hi; i++) {
+        if (nums[i] == num) {
+          count++;
+        }
+      }
+      return count;
+    }
+    function majorityElementRec(nums, lo, hi) {
+      // base case; the only element in an array of size 1 is the majority
+      // element.
+      if (lo == hi) {
+        return nums[lo];
+      }
+
+      // recurse on left and right halves of this slice.
+      let mid = (hi - lo) / 2 + lo;
+      let left = majorityElementRec(nums, lo, Math.floor(mid));
+      let right = majorityElementRec(nums, Math.floor(mid) + 1, hi);
+
+      // if the two halves agree on the majority element, return it.
+      if (left == right) {
+        return left;
+      }
+
+      // otherwise, count each element and return the "winner".
+      let leftCount = countInRange(nums, left, lo, hi);
+      let rightCount = countInRange(nums, right, lo, hi);
+
+      return leftCount > rightCount ? left : right
+    }
+    function majorityElement(nums) {
+      return majorityElementRec(nums, 0, nums.length - 1);
+    }
+    let res = majorityElement([2, 2, 3, 2, 2, 2, 2, 2, , 2, 546, 6, 2, 45, 45, 4, 2])
+    console.log(res)
+
+
+
+
+
+    /**
+ * @param {string} digits
+ * @return {string[]}
+ */
+
+    var letterCombinations = function (digits) {
+      if (digits === '') return []
+      const result = []
+
+      combinations(digits, 0, '', result)
+      return result
+    };
+
+    /**
+     * digits: analyze digit
+     * index: current iterator number
+     * s: prev total string
+     */
+    var combinations = (digits, index, s, result) => {
+      if (index === digits.length) {
+        result.push(s)
+        return
+      }
+
+      const char = digits[index]
+      const map = {
+        '2': 'abc',
+        '3': 'def',
+        '4': 'ghi',
+        '5': 'jkl',
+        '6': 'mno',
+        '7': 'pqrs',
+        '8': 'tuv',
+        '9': 'wxyz'
+      }
+
+      const charMapString = map[char]
+
+      for (let i = 0; i < charMapString.length; i++) {
+        combinations(digits, index + 1, s + charMapString[i], result)
+      }
+    }
+  </script>
+</body>
+
+</html>
